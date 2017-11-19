@@ -1,26 +1,27 @@
 #include "centralized.h"
 
-void runCentralized (int *num, int *globalSense){
+int count;
+bool sense;
+int threadCount;
 
-	int NUMTHREADS = *num; 
-	int localSense = *globalSense;
-        
-        /*decrement*/
-	#pragma omp critical 
-	{
-		*num = *num - 1;
-	}
+void centralizedBarrierInit(int num_threads){
+	threadCount = num_threads;	
+	count = num_threads;
+	sense = true;
+	omp_set_num_threads(num_threads);
+}
 
-	/*flip local sense if the last thread*/
-	if( *num == 0 ){
-		*num = NUMTHREADS;
-		/* Flip the sense for all threads*/
-		*globalSense = !localSense;
+void centralizedBarrier(){ 
+	bool localSense = !sense;	//toggle local sense
+       	//atomic decrement - an alternative is __Sync_fetch_and_sub but here we are using openMP style code
+	//printf("%d",count);
+	if(__sync_fetch_and_sub(&count, 1) == 1){
+		count = threadCount;
+		sense = localSense;
 	}
-	else {
-		/* Spin on sense reversal*/
-		while( *globalSense == localSense );
-	}
+	else{
+		while(sense != localSense);
+	}	
 }
 
 

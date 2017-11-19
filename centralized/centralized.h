@@ -2,4 +2,6 @@
 #include <stdio.h>
 #include <omp.h>
 
-void runCentralized (int *count, int *sense);
+typedef enum {false,true} bool;
+void centralizedBarrierInit(int num_threads);
+void centralizedBarrier ();
