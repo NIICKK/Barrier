@@ -6,7 +6,7 @@
 int rounds; 	
 int msgArray[12][20];//MAX #ofthreads and MAX #ofround
 
-void setBarrier(int numThreads){
+void OMPdisseminationBarrierInit(int numThreads){
         omp_set_num_threads(numThreads);
 	rounds = ceil(log(numThreads)/log(2));	
         
@@ -17,7 +17,7 @@ void setBarrier(int numThreads){
 	}
 }
 
-void runBarrier(int numThreads){
+void OMPdisseminationBarrier(int numThreads){
 	int refID, myID = omp_get_thread_num();
 	//run each round, i: round number
 	for (int i = 0; i < rounds; i++){

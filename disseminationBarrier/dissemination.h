@@ -2,6 +2,6 @@
 #include <math.h>
 #include <omp.h>
 
-void setBarrier(int numThreads);
-void runBarrier(int numThreads);
+void OMPdisseminationBarrierInit(int numThreads);
+void OMPdisseminationBarrier(int numThreads);
 
